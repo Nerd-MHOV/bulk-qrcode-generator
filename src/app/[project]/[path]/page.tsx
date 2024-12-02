@@ -18,7 +18,7 @@ const RedirectPage = async ({ params }: RedirectPageProps) => {
     })
 
     if (urlOut) {
-        redirect('https://google.com')
+        redirect(urlOut.urlOut);
     }
 
     notFound();
