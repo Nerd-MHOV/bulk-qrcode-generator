@@ -1,15 +1,19 @@
 import db from "@/lib/prisma"
 import { notFound, redirect } from "next/navigation"
 
-const RedirectPage = async ({ params }: {
-    params: {
-        project: string,
-        path: string
-    }
-}) => {
+
+type RedirectPageProps = {
+    params: Promise<{
+        project: string;
+        path: string;
+    }>;
+};
+
+const RedirectPage = async ({ params }: RedirectPageProps) => {
+    const { project, path } = await params;
     const urlOut = await db.links.findFirst({
         where: {
-            urlIn: `/${params.project}/${params.path}`
+            urlIn: `/${project}/${path}`
         }
     })
 

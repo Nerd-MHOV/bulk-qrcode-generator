@@ -8,14 +8,23 @@ export async function createQrcodes(formData: FormData) {
     const amount = formData.get('amount') as string
     const projectId = formData.get('projectId') as string
     const project = await db.projects.findFirst({ where: { id: projectId } })
+
+    // Buscar o último valor gerado
+    const lastLink = await db.links.findFirst({
+        where: { projectId },
+        orderBy: { urlIn: 'desc' }
+    })
+
+    // Extrair o número sequencial do último valor gerado
+    const lastNumber = lastLink ? parseInt(lastLink.urlIn.split('/').pop() || '0', 10) : 0
+
     await db.links.createMany({
-        data: Array.from({ length: Number(amount) }).map(() => ({
+        data: Array.from({ length: Number(amount) }).map((_, index) => ({
             projectId,
-            urlIn: `/${project?.name}/${Math.random().toString(36).substring(7)}`,
+            urlIn: `/${project?.name}/${String(lastNumber + index + 1).padStart(5, '0')}`,
             urlOut: '/empty',
         }))
     })
-
 
     revalidatePath('/project/' + projectId)
     redirect('/project/' + projectId)
@@ -36,6 +45,4 @@ export async function updateQrCodes(formData: FormData) {
     } catch (error) {
         console.error('Error:', error)
     }
-
-
 }
