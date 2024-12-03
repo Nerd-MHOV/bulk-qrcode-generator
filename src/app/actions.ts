@@ -1,6 +1,7 @@
 'use server'
 
 import db from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 export async function createProject(formData: FormData) {
@@ -13,6 +14,6 @@ export async function createProject(formData: FormData) {
     })
 
 
-
+    revalidatePath('/')
     redirect('/project/' + create.id)    
 }
