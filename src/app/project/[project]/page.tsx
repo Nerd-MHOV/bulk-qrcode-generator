@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import DownloadAll from './downloadAll';
 import { DialogUpdateLinkOut } from './dialog-update-linkout';
+import { DialogDeleteProject } from './dialog-delete-project';
 import ImageClickDonwload from './image-click-download';
 const page = async ({ params }: {
     params: Promise<{ project: string }>
@@ -68,6 +69,7 @@ const page = async ({ params }: {
                     <h1 className='text-2xl font-bold'>{project.name}</h1>
                     <DialogCreateQRs projectId={(await params).project} />
 
+                    <DialogDeleteProject projectId={(await params).project} />
                     <DownloadAll links={(await Promise.all(project.Links.map(async link => ({
                         code: link.urlIn,
                         img: await generateQR(link.urlIn)

@@ -30,6 +30,14 @@ export async function createQrcodes(formData: FormData) {
     redirect('/project/' + projectId)
 }
 
+export async function deleteProject(formData: FormData) {
+    const projectId = formData.get('projectId') as string
+    await db.links.deleteMany({ where: { projectId } })
+    await db.projects.delete({ where: { id: projectId } })
+    revalidatePath('/')
+    redirect('/')
+}
+
 export async function updateQrCodes(formData: FormData) {
     console.log('formData:', formData)
     try {
