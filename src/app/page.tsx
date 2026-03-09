@@ -1,5 +1,4 @@
 import { FlaskConicalOff } from "lucide-react";
-import Image from "next/image";
 import { DialogCreateProject } from "./dialog-create-project";
 import db from "@/lib/prisma";
 
