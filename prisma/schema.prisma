@@ -20,7 +20,15 @@ model Projects {
 model Links {
   id        String   @id @default(cuid())
   urlIn    String @unique
-  urlOut   String 
+  urlOut   String
   project   Projects @relation(fields: [projectId], references: [id])
   projectId String
+  scans     Scan[]
+}
+
+model Scan {
+  id        String   @id @default(cuid())
+  scannedAt DateTime @default(now())
+  link      Links    @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  linkId    String
 }

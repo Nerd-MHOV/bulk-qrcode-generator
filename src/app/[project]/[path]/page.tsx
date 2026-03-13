@@ -18,6 +18,9 @@ const RedirectPage = async ({ params }: RedirectPageProps) => {
     })
 
     if (urlOut) {
+        await db.scan.create({
+            data: { linkId: urlOut.id }
+        });
         redirect(urlOut.urlOut);
     }
 

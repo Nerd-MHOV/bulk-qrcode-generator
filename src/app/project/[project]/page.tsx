@@ -7,7 +7,7 @@ import QRCode from 'qrcode';
 import { createCanvas } from 'canvas';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, BarChart3 } from 'lucide-react';
 import DownloadAll from './downloadAll';
 import { DialogUpdateLinkOut } from './dialog-update-linkout';
 import { DialogDeleteProject } from './dialog-delete-project';
@@ -18,7 +18,12 @@ const page = async ({ params }: {
     const project = await db.projects.findFirst({
         where: { id: (await params).project },
         include: {
-            Links: true
+            Links: {
+                include: {
+                    scans: true,
+                    _count: { select: { scans: true } }
+                }
+            }
         }
     })
 
@@ -70,6 +75,10 @@ const page = async ({ params }: {
                     <DialogCreateQRs projectId={(await params).project} />
 
                     <DialogDeleteProject projectId={(await params).project} />
+                    <Link href={`/project/${(await params).project}/stats`} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        <BarChart3 className="w-4 h-4" />
+                        Stats
+                    </Link>
                     <DownloadAll links={(await Promise.all(project.Links.map(async link => ({
                         code: link.urlIn,
                         img: await generateQR(link.urlIn)
@@ -81,6 +90,9 @@ const page = async ({ params }: {
                     project.Links.map(async link => (
                         <div key={link.id} className='flex gap-5 items-center'>
                             <p>{link.urlIn}</p>
+                            <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                                {link._count.scans} {link._count.scans === 1 ? 'scan' : 'scans'}
+                            </span>
                             <ImageClickDonwload
                                 filename={link.urlIn.split(project.name + '/')[1] + ".png"}
                                 src={(await generateQR(link.urlIn))}
