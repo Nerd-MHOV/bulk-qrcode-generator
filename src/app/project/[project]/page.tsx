@@ -36,28 +36,23 @@ const page = async ({ params }: {
     const generateQR = async (code: string) => {
         const url = `https://${currentUrl}${code}`;
 
-        const size = 200; // Tamanho do QR Code
-        const padding = 50; // Espaço extra para o texto
+        const size = 200;
+        const padding = 50;
 
-        // Criação do canvas maior
         const canvas = createCanvas(size, size + padding);
         const context = canvas.getContext('2d');
 
-        // Gera o QR Code no canvas
         await QRCode.toCanvas(canvas, url, {
             margin: 5,
             width: size,
         });
 
-        // Adiciona o texto abaixo do QR Code
         context.font = 'bold 16px Arial';
         context.textAlign = 'center';
         context.fillStyle = '#000';
         context.fillText(code.split(project.name + '/')[1], size / 2, size - 5);
 
-        // Converte o canvas para Base64 (Data URL)
         return canvas.toDataURL('image/png');
-
     }
 
 
