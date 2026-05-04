@@ -2,6 +2,9 @@ import { FlaskConicalOff } from "lucide-react";
 import { DialogCreateProject } from "./dialog-create-project";
 import db from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function Home() {
   const projects = await db.projects.findMany();
   return (

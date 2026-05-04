@@ -12,6 +12,10 @@ import DownloadAll from './downloadAll';
 import { DialogUpdateLinkOut } from './dialog-update-linkout';
 import { DialogDeleteProject } from './dialog-delete-project';
 import ImageClickDonwload from './image-click-download';
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const page = async ({ params }: {
     params: Promise<{ project: string }>
 }) => {

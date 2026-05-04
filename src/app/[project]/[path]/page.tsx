@@ -9,6 +9,9 @@ type RedirectPageProps = {
     }>;
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const RedirectPage = async ({ params }: RedirectPageProps) => {
     const { project, path } = await params;
     const urlOut = await db.links.findFirst({
